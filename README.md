@@ -1,4 +1,4 @@
-# 📊 SORA Analytics — Liquidity, FX, and Market Structure
+# 📊 SORA Analytics - Liquidity, FX, and Market Structure
 
 A data-driven exploration of the **Singapore Overnight Rate Average (SORA)**, focusing on liquidity dynamics, calendar effects, and macro-financial relationships.
 
@@ -23,11 +23,11 @@ This project analyzes SORA using historical data, with an emphasis on:
 
 ---
 
-# 🧪 Phase 1 — Data Exploration & Analysis
+# 🧪 Phase 1 - Data Exploration & Analysis
 
 ## 🔍 Objective
 
-Understanding what lies in plain sight. Before deeper analysis & predictive models. 
+Understanding what lies in plain sight, before deeper analysis & predictive models. 
 
 ---
 
@@ -58,7 +58,7 @@ Skew: +0.165
 
 ---
 
-## 🔁 2. Autocorrelation & Mean Reversion
+## 🔁 2. Autocorrelation & Conditional Mean Reversion
 
 **Method**
 
@@ -77,7 +77,29 @@ Autocorrelation: -0.063
 
 **Takeaway**
 
-> Short-term SORA movements tend to partially reverse. If it goes up today it's slightly more likely to go back down tomorrow. 
+> Short-term SORA movements tend to partially reverse. If it goes up today it's slightly more likely to go back down tomorrow.
+
+---
+
+### Mean Reversion (Larger Movements)
+
+**Method** 
+
+Same as above but only when its above the standard deviation. 
+
+**Result** 
+
+```
+Correlation ≈ -0.193
+```
+
+**Interpretation**
+
+The correlation is 3x higher than the step before, with a decent predictive power. This means after a larger movement, SORA is much more likely to reverse direction, as if it is trying to correct an overreaction. 
+
+**Takeaway**
+
+> Mean reversion is state-dependent and is much stronger following a larger movement (defined here as above a standard deviation). 
 
 ---
 
@@ -105,6 +127,24 @@ Correlation (Volume vs SORA): 0.25
 **Takeaway**
 
 > Liquidity stress (captured by intraday range) is a **primary driver** of SORA movements.
+
+---
+
+### Range vs SORA change
+
+However, when contrasted to the change in the SORA level and not SORA itself, the opposite happens. 
+
+**Result**
+
+```
+Correlation = 0.032515
+```
+
+**Interpretation**
+SORA vs Range has a 0.755 correlation but the change against range only has a 0.032. This disparity would suggest that the Range explains the level of SORA but not the movement of SORA. High range = stressed environment but doesn't tell us if the movement will be up or down.
+
+**Takeaway**
+> Intraday dispersion (range) reflects underlying liquidity conditions but does not directly predict the direction of SORA changes.
 
 ---
 
@@ -163,7 +203,7 @@ Negative spikes:
 - Tuesday   : 23.4%
 - Thursday  : 23.4%
 - Wednesday : 20.4%
-- Friday    : 8%
+- Friday    : 8.1%
 ```
 
 **Interpretation**
@@ -173,7 +213,26 @@ Negative spikes:
 
 **Takeaway**
 
-> SORA exhibits a **weekly liquidity cycle**, where funding conditions tighten before the weekend and normalize afterward. Before the weekend liquidity tightens to cover 3 days of exposure (Sat, Sun, Mon) and loosens on Monday & Tuesday. 
+> SORA exhibits a **weekly liquidity cycle**, where funding conditions tighten before the weekend and normalize afterward. Before the weekend liquidity tightens to cover 3 days of exposure (Sat, Sun, Mon) and loosens on Monday & Tuesday.
+
+---
+
+### Volatility by Weekday
+
+**Result**
+```
+Day of week
+Monday    : 0.147889
+Tuesday   : 0.136473
+Wednesday : 0.129108
+Thursday  : 0.161204
+Friday    : 0.161683
+```
+
+**Takeaway**
+
+> Volatility high at end of week and craters on wednesday, combined with earlier findings where spikes are most common during these times - consistent with pre-weekend liquidity tightening.
+
 
 ---
 
@@ -199,7 +258,54 @@ Number of spikes: 190 out of ~3,300 observations (roughly 5.7%)
 
 ---
 
-## 🧪 6. Stationarity
+### Spike Magnitude Distribution
+
+**Results**
+```
+count    190.000000
+mean      -0.003113
+std        0.480090
+min       -1.262600
+25%       -0.401450
+50%       -0.305100
+75%        0.406625
+max        1.482300
+```
+
+**Interpretation** 
+* mean -0.003 (slightly negative but basically 0)
+* std 0.48 (much larger than the std of sora_change which is 0.15, over 3x larger).
+
+**Takeaway**
+> Strangely enough spikes are symmetric overall - extreme events are large in both directions, not just upward. It seems to be a zero sum situation in which friday's upward spikes are negated by monday's downward spikes, reflecting rapid tightening and subsequent normalization cycles.
+
+---
+
+## ↕️ 6. SORA Movement Directional Symmetry 
+**Method**
+
+I identify whether changes, positive or negative are of the same magnitude.
+
+**Result**
+
+```
+Positive mean: +0.0935
+Negative mean: -0.0948
+Std (pos): 0.1197
+Std (neg): 0.1172
+```
+
+**Interpretation**
+
+Magnitudes are almost symmetric.
+
+**Takeaway**
+
+> The size of upward and downward moves is similar BUT earlier I found that timing of the moves are asymmetric. SORA movements are directionally symmetric in magnitude, but asymmetric in timing, with increases concentrated toward the end of the week and decreases at the start.
+
+---
+
+## 🧪 7. Stationarity
 
 **Method**
 
@@ -219,6 +325,28 @@ p-value: 5.38e-29
 **Takeaway**
 
 > SORA changes are **stationary**, making them suitable for time-series modeling.
+
+---
+
+## 🎢 7.Volatility vs SORA rate
+
+**Method**
+
+I derive volatility by using the standard deviation of a rolling window from the sora_change column. The volatility is then correlated against the SORA rate.
+
+**Result**
+
+```
+Correlation ≈ 0.319
+```
+
+**Interpretation**
+
+Moderate positive correlation. When SORA is high the system is more unstable.
+
+**Takeaway**
+
+> Higher SORA levels are associated with increased volatility, suggesting tighter liquidity environments are more unstable. 
 
 ---
 
