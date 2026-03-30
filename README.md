@@ -177,7 +177,7 @@ Negative spikes:
 
 ---
 
-## ⚡ 6. Spike Behavior
+## ⚡ 5. Spike Behavior
 
 **Method**
 
@@ -199,7 +199,7 @@ Number of spikes: 190 out of ~3,300 observations (roughly 5.7%)
 
 ---
 
-## 🧪 7. Stationarity
+## 🧪 6. Stationarity
 
 **Method**
 
