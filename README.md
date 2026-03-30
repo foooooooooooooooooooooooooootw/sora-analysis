@@ -141,6 +141,7 @@ Correlation = 0.032515
 ```
 
 **Interpretation**
+
 SORA vs Range has a 0.755 correlation but the change against range only has a 0.032. This disparity would suggest that the Range explains the level of SORA but not the movement of SORA. High range = stressed environment but doesn't tell us if the movement will be up or down.
 
 **Takeaway**
