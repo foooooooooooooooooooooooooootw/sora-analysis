@@ -34,7 +34,8 @@ Understanding what lies in plain sight. Before deeper analysis & predictive mode
 ## 📊 1. Distribution of SORA Changes
 
 **Method**
-We analyze the distribution of daily changes in SORA with a simple .describe()
+
+I analyze the distribution of daily changes in SORA with a simple .describe()
 
 **Result**
 
@@ -60,7 +61,8 @@ Skew: +0.165
 ## 🔁 2. Autocorrelation & Mean Reversion
 
 **Method**
-We compute lag-1 autocorrelation of SORA changes.
+
+I compute lag-1 autocorrelation of SORA changes.
 
 **Result**
 
@@ -82,7 +84,8 @@ Autocorrelation: -0.063
 ## 📊 3. Liquidity Indicators (Range & Volume)
 
 **Method**
-We examine relationships between SORA and:
+
+I examine relationships between SORA and:
 
 * Derived Intraday range (High - Low)
 * Transaction volume
@@ -140,7 +143,8 @@ T-test (Friday vs others): p < 0.001 (2.65e-32)
 ### ⚡ Spike Analysis (Extreme Movements)
 
 **Method**
-We identify extreme SORA changes (>2 standard deviations) and analyze their distribution across weekdays.
+
+I identify extreme SORA changes (defined here as >2 standard deviations) and analyze their distribution across weekdays.
 
 **Result**
 
@@ -176,6 +180,7 @@ Negative spikes:
 ## ⚡ 6. Spike Behavior
 
 **Method**
+
 I identify extreme movements defined as a 2σ threshold.
 
 **Result**
@@ -197,6 +202,7 @@ Number of spikes: 190 out of ~3,300 observations (roughly 5.7%)
 ## 🧪 7. Stationarity
 
 **Method**
+
 Augmented Dickey-Fuller (adfuller) test on SORA changes.
 
 **Result**
