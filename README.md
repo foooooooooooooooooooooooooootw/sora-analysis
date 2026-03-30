@@ -181,7 +181,7 @@ Negative spikes:
 
 **Method**
 
-I identify extreme movements defined as a 2σ threshold.
+I identify extreme movements defined here as a 2σ threshold.
 
 **Result**
 
@@ -191,7 +191,7 @@ Number of spikes: 190 out of ~3,300 observations (roughly 5.7%)
 
 **Interpretation**
 
-* Relatively frequent extreme events relative to normal distribution. One can expect 1-2 spikes per month. 
+* Relatively frequent extreme events relative to normal distribution. **One can expect 1-2 spikes per month.**
 
 **Takeaway**
 
