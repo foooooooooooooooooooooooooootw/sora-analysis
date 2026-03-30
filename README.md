@@ -152,7 +152,7 @@ I identify extreme SORA changes (defined here as >2 standard deviations) and ana
 Chi-square test: χ² = 10.30, p = 0.036  
 
 Positive spikes:
-- Friday   : 46.7%
+- Friday    : 46.7%
 - Thursday  : 23.9%
 - Monday    : 10.8%
 - Tuesday   : 10.8%
