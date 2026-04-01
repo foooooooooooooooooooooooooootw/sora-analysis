@@ -351,6 +351,25 @@ Moderate positive correlation. When SORA is high the system is more unstable.
 
 ---
 
+## 9. Fx Correlation
+
+**Method**
+
+I dumped the full range of currencies from the MAS website (which I believe should signify trading partners), calculate their percent changes and perform correlation to see how one movement affects another.
+
+**Result**
+ 
+ Some pretty plots (heatmap/clustermap)
+![Plots](./plots/fx.png)
+![Plots](./plots/fx2.png)
+
+**Takeaway**
+
+Free-floating currencies (in this case EUR, JPY, KRW, GBP, CHF) demonstrate low correlation with USD when expressed against SGD, reflecting independent monetary policies and market-driven exchange rates.
+
+Juxtaposed, managed and USD-linked currencies (CNY, VND, HKD, SAR, AED) show strong co-movement, indicating shared policy anchors and heavier exposure to USD.
+
+
 # 🧠 Key Findings
 
 * SORA is **stable most of the time**, with occasional large shocks
