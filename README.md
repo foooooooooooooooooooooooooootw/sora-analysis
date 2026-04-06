@@ -359,7 +359,7 @@ I dumped the full range of currencies from the MAS website (which I believe shou
 
 **Result**
  
- Some pretty plots (heatmap/clustermap)
+Some pretty plots (heatmap/clustermap)
 ![Plots](./plots/fx.png)
 ![Plots](./plots/fx2.png)
 
@@ -372,6 +372,7 @@ Juxtaposed, managed and USD-linked currencies (CNY, VND, HKD, SAR, AED) show str
 ## 10. Finding the SORA Coefficient
 
 **Method**
+
 I try to solve for β in the formula ΔSORA ≈ β × ΔFedRate. 
 
 There are 3 methods I try to achieve this, all of which involve linear regression. The first, we take notice of a fed rate cut/hike event and then apply a 1 week window before and after. 
@@ -389,6 +390,7 @@ Finally, the third one uses lags to see if we can catch any sort of delayed tran
 | Distributed lag regression| ~0.29  | ~0.008|
 
 **Takeaway**
+
 β can be expected to be, on average, between 0.28 and 0.3. A 1% change in the FED will lead to a 0.28-0.30% change in SORA. Since the FED typically targets 25 bps cuts or hikes at a time, I would expect the most common SORA adjustments to be around 7bps. 
 
 However, with the low R² score, this rule seems to capture only about 9% of SORA variation, suggesting domestic liquidity conditions affect short-term dynamics to a greater degree (which can in turn be affected by events that caused the fed to have that adjustment).
