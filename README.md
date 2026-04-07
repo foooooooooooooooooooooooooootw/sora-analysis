@@ -1,3 +1,8 @@
+<p align="center">
+  <img src="plots/buildings.webp" max-width=90vw />
+</p>
+
+<br></br>
 # 📊 SORA Analytics - Liquidity, FX, and Market Structure
 
 A data-driven exploration of the **Singapore Overnight Rate Average (SORA)**, focusing on liquidity dynamics, calendar effects, and macro-financial relationships.
@@ -24,7 +29,7 @@ A data-driven exploration of the **Singapore Overnight Rate Average (SORA)**, fo
     - 3.9 [Fx Correlation](#9-fx-correlation)
     - 3.10 [Finding the SORA Coefficient](#10-finding-the-sora-coefficient)
 
-4. [Phase 2 — Feature Engineering](#phase-15--feature-engineering)
+4. [Phase 2 — Feature Engineering](#phase-2--feature-engineering)
     - 4.1 [Lag Features](#41-lag-features)
     - 4.2 [Volatility Features](#42-volatility-features)
     - 4.3 [Mean Reversion Signals](#43-mean-reversion-signals)
@@ -85,7 +90,7 @@ This project analyzes SORA using historical data, with an emphasis on:
 
 ---
 
-# 🧪 Phase 1 - Data Exploration & Analysis
+# 🔬 Phase 1 - Data Exploration & Analysis
 
 ## 🔍 Objective
 
@@ -460,9 +465,52 @@ Finally, the third one uses lags to see if we can catch any sort of delayed tran
 
 However, with the low R² score, this rule seems to capture only about 9% of SORA variation, suggesting domestic liquidity conditions affect short-term dynamics to a greater degree (which can in turn be affected by events that caused the fed to have that adjustment).
 
+---
 
+# 🧪 Phase 2 - Feature Engineering
 
+## Objective
+Extract predictive signals from raw SORA and FX data.
 
+## Features Created
+- Lag features (lag1, lag2, lag3)
+- Volatility (rolling std)
+- Mean reversion signals
+- Calendar features (Friday/Monday)
+- Interaction terms
+
+## Key Insight
+Feature engineering significantly improves signal extraction, especially:
+- lag features
+- volatility
+- calendar effects
+
+---
+
+## 🤖 Phase 3 — Predictive Modeling
+
+### Objective
+Predict direction of SORA changes.
+
+### Models Used
+- Linear Regression
+- Logistic Regression
+- XGBoost
+
+### Evaluation Metrics
+- Accuracy
+- ROC-AUC
+- RMSE
+
+### Results
+| Model | Accuracy | AUC |
+|------|--------|-----|
+| Logistic Regression | 0.60 | 0.62 |
+| XGBoost | 0.61 | 0.63 |
+
+### Key Insight
+- Calendar effects (especially Friday) dominate predictions
+- Mean reversion provides secondary signal
 # 🧠 Key Findings
 
 * SORA is **stable most of the time**, with occasional large shocks
