@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="plots/buildings.webp" max-width=90vw />
+  <img src="plots/buildings.webp" style="width: 100%; height: 450px;/>
 </p>
 
 <br></br>
