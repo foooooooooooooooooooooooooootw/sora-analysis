@@ -2,7 +2,7 @@
   <img src="plots/buildings.webp" style="width: 100%; height: 450px;/>
 </p>
 
-<br></br>
+---
 
 # 📊 SORA Analytics - Liquidity, FX, and Market Structure
 
