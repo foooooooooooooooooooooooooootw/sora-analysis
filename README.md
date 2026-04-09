@@ -28,7 +28,7 @@ A data-driven exploration of the **Singapore Overnight Rate Average (SORA)**, fo
     - 3.9 [Fx Correlation](#9-fx-correlation)
     - 3.10 [Finding the SORA Coefficient](#10-finding-the-sora-coefficient)
 
-4. [Phase 2 — Feature Engineering](#phase-2--feature-engineering)
+4. [Phase 2 — Feature Engineering](#-phase-2---feature-engineering)
     - 4.1 [Lag Features](#41-lag-features)
     - 4.2 [Volatility Features](#42-volatility-features)
     - 4.3 [Mean Reversion Signals](#43-mean-reversion-signals)
@@ -85,6 +85,8 @@ This project analyzes SORA using historical data, with an emphasis on:
 
 * SORA historical data (MAS): https://eservices.mas.gov.sg/statistics/dir/DomesticInterestRates.aspx
 * FX rates (MAS): https://eservices.mas.gov.sg/statistics/msb/exchangerates.aspx
+*  S\$ Nominal Effective Exchange Rate Index - \$NEER (MAS): https://www.mas.gov.sg/statistics/exchange-rates/s$neer
+*  List of Monetary Policy Decisions (MAS): https://www.mas.gov.sg/monetary-policy/past-monetary-policy-decisions
 * US Federal Reserve rates: https://www.macrotrends.net/datasets/2015/fed-funds-rate-historical-chart
 
 ---
@@ -463,6 +465,40 @@ Finally, the third one uses lags to see if we can catch any sort of delayed tran
 β can be expected to be, on average, between 0.28 and 0.3. A 1% change in the FED will lead to a 0.28-0.30% change in SORA. Since the FED typically targets 25 bps cuts or hikes at a time, I would expect the most common SORA adjustments to be around 7bps. 
 
 However, with the low R² score, this rule seems to capture only about 9% of SORA variation, suggesting domestic liquidity conditions affect short-term dynamics to a greater degree (which can in turn be affected by events that caused the fed to have that adjustment).
+
+---
+
+### Time-Varying Sensitivity of SORA to Fed Policy
+
+
+A while later I realized ΔSORA ≈ β × ΔFedRate is much too simple - as my AUC and Brier score began to improve I felt something was amiss. This came in the form of realizing there is absolutely nothing stopping the β value from changing every day, and as such the original forumla treats it as a constant when that cannot be the case. 
+
+**Method**
+
+I took a 1 year window (252 days) and calculate the β every day.
+
+**Result**
+```
+count    3071.000000
+mean       -0.207523
+std         0.730367
+min        -2.830172
+25%        -0.758095
+50%        -0.015442
+75%         0.340256
+max         1.154763
+```
+
+![Plots](./plots/soravsfed.png)
+
+**Takeaway**
+
+β > 0 → SORA moves *with* Fed
+β ≈ 0 → Fed irrelevant
+β < 0 → SORA moves *opposite* Fed
+
+The relationship between SORA and Federal Reserve rate changes is highly unstable over time, with rolling betas fluctuating between positive and negative values. This suggests that the transmission mechanism is NOT constant, and simple linear models fail to capture this dynamic.
+
 
 ---
 
