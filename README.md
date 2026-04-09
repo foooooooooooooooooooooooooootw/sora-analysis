@@ -493,9 +493,11 @@ max         1.154763
 
 **Takeaway**
 
-β > 0 → SORA moves *with* Fed
-β ≈ 0 → Fed irrelevant
-β < 0 → SORA moves *opposite* Fed
+- β > 0 → SORA moves *with* Fed
+
+- β ≈ 0 → Fed irrelevant
+
+- β < 0 → SORA moves *opposite* Fed
 
 The relationship between SORA and Federal Reserve rate changes is highly unstable over time, with rolling betas fluctuating between positive and negative values. This suggests that the transmission mechanism is NOT constant, and simple linear models fail to capture this dynamic.
 
