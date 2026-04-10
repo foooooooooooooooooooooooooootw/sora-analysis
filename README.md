@@ -30,11 +30,14 @@ A data-driven exploration of the **Singapore Overnight Rate Average (SORA)**, fo
         - 3.10.1 [Time-Varying Sensitivity of SORA to Fed Policy](#time-varying-sensitivity-of-sora-to-fed-policy)
 
 4. [Phase 2 — Feature Engineering](#-phase-2---feature-engineering)
-    - 4.1 [Lag Features](#41-lag-features)
-    - 4.2 [Volatility Features](#42-volatility-features)
-    - 4.3 [Mean Reversion Signals](#43-mean-reversion-signals)
-    - 4.4 [Calendar Effects](#44-calendar-effects)
-    - 4.5 [Interaction Features](#45-interaction-features)
+    - 4.1 [Lag & Momentum Features](#-1-lag--momentum-features)
+    - 4.2 [Volatility & Regime Features](#-2-volatility--regime-features)
+    - 4.3 [Mean Reversion Signals](#-3-mean-reversion-signals)
+    - 4.4 [Calendar Effects](#-4-calendar-effects-1)
+    - 4.5 [FX & Macro Signals](#-5-fx--macro-signals)
+    - 4.6 [Policy & Regime Features](#-6-policy--regime-features)
+    - 4.7 [Interaction Features](#-7-interaction-features)
+    - 4.8 [Feature Engineering Key Takeaways](#-feature-engineering-key-takeaways)
 
 5. [Phase 3 — Predictive Modeling](#phase-2--predictive-modeling)
     - 5.1 [Problem Formulation](#51-problem-formulation)
@@ -628,7 +631,7 @@ Feature interactions help model regime-dependent behavior (e.g. lag effects diff
 
 ---
 
-## 🧠 Key Takeaways
+## 🧠 Feature Engineering Key Takeaways
 - Feature engineering was the primary driver of model performance
 - Different feature groups capture distinct market regimes:
     - Volatility → crisis periods
@@ -636,6 +639,7 @@ Feature interactions help model regime-dependent behavior (e.g. lag effects diff
     - FX & policy → macro-driven shifts
 - Combining these signals enabled the model to reach ~0.711 AUC, indicating strong predictive structure in SORA dynamics
 
+---
 
 ## 🤖 Phase 3 — Predictive Modeling
 
@@ -653,10 +657,9 @@ Predict direction of SORA changes.
 - RMSE
 
 ### Results
-| Model | Accuracy | AUC |
+| Model | AUC | Brier score |
 |------|--------|-----|
-| Logistic Regression | 0.60 | 0.62 |
-| XGBoost | 0.61 | 0.63 |
+| XGBoost | 0.711 | 0.22 |
 
 ### Key Insight
 - Calendar effects (especially Friday) dominate predictions
