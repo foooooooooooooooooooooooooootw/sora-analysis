@@ -27,6 +27,7 @@ A data-driven exploration of the **Singapore Overnight Rate Average (SORA)**, fo
     - 3.8 [Volatility vs SORA rate](#-8-volatility-vs-sora-rate)
     - 3.9 [Fx Correlation](#9-fx-correlation)
     - 3.10 [Finding the SORA Coefficient](#10-finding-the-sora-coefficient)
+        - 3.10.1 [Time-Varying Sensitivity of SORA to Fed Policy](#time-varying-sensitivity-of-sora-to-fed-policy)
 
 4. [Phase 2 — Feature Engineering](#-phase-2---feature-engineering)
     - 4.1 [Lag Features](#41-lag-features)
@@ -506,23 +507,135 @@ The relationship between SORA and Federal Reserve rate changes is highly unstabl
 
 # 🧪 Phase 2 - Feature Engineering
 
-## Objective
-Extract predictive signals from raw SORA and FX data.
+## 🎯 Objective
 
-## Features Created
-- Lag features (lag1, lag2, lag3)
-- Volatility (rolling std)
-- Mean reversion signals
-- Calendar features (Friday/Monday)
-- Interaction terms
-
-## Key Insight
-Feature engineering significantly improves signal extraction, especially:
-- lag features
-- volatility
-- calendar effects
+Extract predictive signals from raw SORA and FX data by capturing:
+- Short-term price dynamics
+- Volatility
+- Mean reversion behavior
+- Macro and policy context
 
 ---
+
+## Feature Groups
+
+---
+
+## 🔁 1. Lag & Momentum Features
+
+Capture short-term autocorrelation and directional persistence in SORA.
+
+```lag1, lag2, lag3```
+
+**Takeaway**:
+
+SORA exhibits short-term dependency, showing that recent movements hold predictive power over the near future.
+
+---
+
+## 🌊 2. Volatility & Regime Features
+
+Capture changing market conditions and environmental stress.
+
+```
+- vol_5, sora_vol_5/10/20/30
+- vol_percentile
+- stress_regime
+- range_z
+```
+
+**Takeaway**:
+
+Volatility spikes (e.g. COVID) significantly alter dynamics and predictive ability.
+
+---
+
+## 🔄 3. Mean Reversion Signals
+
+Capture deviations from the norm and expected pullbacks.
+
+```
+- reversion_signal
+- distance_from_mean
+- sora_level_z
+```
+
+**Takeaway**:
+
+SORA tends to revert under normal conditions, but this behavior strengthens during spikes and weakens within high stress environments.
+
+---
+
+## 📅 4. Calendar Effects
+
+Account for systematic temporal behavioural patterns.
+
+```
+- is_friday, is_monday
+- month, is_month_end
+- quarter
+```
+
+**Takeaway**:
+
+End-of-week and end-of-month effects reflect liquidity cycles and institutional positioning, having a positive correlation with SORA rising, while the opposite is true. 
+
+---
+
+## 💱 5. FX & Macro Signals
+
+Incorporate external drivers from currency markets / assumed trading partners. These currencies are against SGD so their percent changes (relative movements) are calculated and lagged. 
+
+```
+- NZD_ret_lag1, CNY_ret_lag1, KRW_ret_lag1, etc.
+- CAD_vol_5
+```
+
+**Takeaway**:
+
+FX movements act as leading indicators for rate changes in open economies, and reflect an underlying abstract relationship. 
+
+---
+
+## 🏦 6. Policy & Regime Features
+
+Model the impact of monetary policy decisions.
+
+```
+- mas_event (whether there was a meeting that day)
+- days_since_mas
+- sora_regime
+- neer, neer_ret_5, neer_ret_20, neer_z
+```
+
+**Takeaway**:
+
+Policy timing and regime shifts influence rate behavior beyond pure market signals. Even foreknowledge of a meeting can influence the market. 
+
+---
+
+## 🔗 7. Interaction Features
+
+Capture non-linear relationships between signals.
+
+```
+- lag1_high_vol
+```
+
+**Takeaway**:
+
+Feature interactions help model regime-dependent behavior (e.g. lag effects differ under high volatility).
+
+---
+
+## 🧠 Key Takeaways
+- Feature engineering was the primary driver of model performance
+- Different feature groups capture distinct market regimes:
+    - Volatility → crisis periods
+    - Mean reversion → stable environments
+    - FX & policy → macro-driven shifts
+- Combining these signals enabled the model to reach ~0.711 AUC, indicating strong predictive structure in SORA dynamics
+
 
 ## 🤖 Phase 3 — Predictive Modeling
 
