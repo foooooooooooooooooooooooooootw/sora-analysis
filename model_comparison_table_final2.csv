@@ -1,0 +1,9 @@
+,AUC,Brier Score,F1 Score
+LightGBM (tuned),0.6572,0.2336,0.6036
+CatBoost (tuned),0.6459,0.2399,0.5713
+XGBoost (tuned),0.6423,0.2355,0.5764
+Random Forest (tuned),0.6383,0.2377,0.5771
+LSTM (tuned),0.6302,0.2653,0.6043
+SVC (tuned),0.63,0.2576,0.5137
+LSTM (base),0.6275,0.2459,0.6328
+Logistic Regression (tuned),0.6271,0.2655,0.5358

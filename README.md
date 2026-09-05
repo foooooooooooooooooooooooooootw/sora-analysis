@@ -1,80 +1,74 @@
 <p align="center">
+  <img src="plots/headline_hit_rate.png" />
+</p>
+
+# SORA Direction Prediction & Model Interpretability
+*Feature engineering, model comparison, natural language processing and confidence-aware forecasting for Singapore's Overnight Rate Average*
+
+*Also known as chasing data morganas*
+
+---
+
+<p align="center">
   <img src="plots/buildings.webp" />
 </p>
 
-# 📊 SORA Analytics - Liquidity, FX, and Market Structure
-
-A data-driven exploration of the **Singapore Overnight Rate Average (SORA)**, focusing on liquidity dynamics, calendar effects, and macro-financial relationships.
-
----
 ## 📑 Table of Contents
 1. [Overview](#-overview)
-2. [Data Sources / Datasets](#-data-sources)
-3. [Phase 1 — Exploratory Data Analysis (EDA)](#-phase-1---data-exploration--analysis)
-    - 3.1 [Summary Statistics](#-1-summary-statistics)
-    - 3.2 [Autocorrelation & Conditional Mean Reversion](#-2-autocorrelation--conditional-mean-reversion)
-        - 3.2.1 [Mean Reversion (Larger Movements)](#mean-reversion-larger-movements)
-    - 3.3 [Liquidity Indicators (Range & Volume)](#-3-liquidity-indicators-range--volume)
-        - 3.3.1 [Range vs SORA change](#range-vs-sora-change)
-    - 3.4 [Calendar Effects](#-4-calendar-effects)
-        - 3.4.1 [Weekday Analysis](#weekday-analysis)
-        - 3.4.2 [Spike Analysis (Extreme Movements)](#-spike-analysis-extreme-movements)
-        - 3.4.3 [Volatility by Weekday](#volatility-by-weekday)
-    - 3.5 [Spike Behavior](#-5-spike-behavior)
-        - 3.5.1 [Spike Magnitude Distribution](#spike-magnitude-distribution)
-    - 3.6 [SORA Movement Directional Symmetry](#%EF%B8%8F-6-sora-movement-directional-symmetry)
-    - 3.7 [Stationarity](#-7-stationarity)
-    - 3.8 [Volatility vs SORA rate](#-8-volatility-vs-sora-rate)
-    - 3.9 [Fx Correlation](#9-fx-correlation)
-    - 3.10 [Finding the SORA Coefficient](#10-finding-the-sora-coefficient)
-        - 3.10.1 [Time-Varying Sensitivity of SORA to Fed Policy](#time-varying-sensitivity-of-sora-to-fed-policy)
-
-4. [Phase 2 — Feature Engineering](#-phase-2---feature-engineering)
-    - 4.1 [Lag & Momentum Features](#-1-lag--momentum-features)
-    - 4.2 [Volatility & Regime Features](#-2-volatility--regime-features)
-    - 4.3 [Mean Reversion Signals](#-3-mean-reversion-signals)
-    - 4.4 [Calendar Effects](#-4-calendar-effects-1)
-    - 4.5 [FX & Macro Signals](#-5-fx--macro-signals)
-    - 4.6 [Policy & Regime Features](#-6-policy--regime-features)
-    - 4.7 [Interaction Features](#-7-interaction-features)
-    - 4.8 [Feature Engineering Key Takeaways](#-feature-engineering-key-takeaways)
-
-5. [Phase 3 — Predictive Modeling](#phase-2--predictive-modeling)
-    - 5.1 [Problem Formulation](#51-problem-formulation)
-    - 5.2 [Baseline Models (Linear / Ridge)](#52-baseline-models-linear--ridge)
-    - 5.3 [Logistic Regression (Direction Prediction)](#53-logistic-regression-direction-prediction)
-    - 5.4 [Threshold Tuning](#54-threshold-tuning)
-    - 5.5 [Feature Selection & Pruning](#55-feature-selection--pruning)
-    - 5.6 [XGBoost Model](#56-xgboost-model)
-    - 5.7 [SHAP Interpretation](#57-shap-interpretation)
-    - 5.8 [Greedy Feature Search](#58-greedy-feature-search)
-    - 5.9 [Rolling Validation (Time-Series CV)](#59-rolling-validation-time-series-cv)
-
-6. [Phase 4 — FX Feature Integration](#phase-25--fx-feature-integration)
-    - 6.1 [Currency Dataset Expansion](#61-currency-dataset-expansion)
-    - 6.2 [FX Lag & Volatility Features](#62-fx-lag--volatility-features)
-    - 6.3 [Feature Importance vs Model Performance](#63-feature-importance-vs-model-performance)
-    - 6.4 [Currency Clustering Insights](#64-currency-clustering-insights)
-
-7. [Phase 5 — Currency Basket Exploration (Planned)](#phase-3--currency-basket-exploration-planned)
-    - 7.1 [Motivation: SGD Basket System](#71-motivation-sgd-basket-system)
-    - 7.2 [Regression-Based Weight Estimation](#72-regression-based-weight-estimation)
-    - 7.3 [Proxy Currency Grouping](#73-proxy-currency-grouping)
-    - 7.4 [Linking FX Basket to SORA Dynamics](#74-linking-fx-basket-to-sora-dynamics)
-
-8. [Macroeconomic Analysis](#macroeconomic-analysis)
-    - 8.1 [Federal Reserve vs SORA](#81-federal-reserve-vs-sora)
-    - 8.2 [Event-Based Analysis](#82-event-based-analysis)
-    - 8.3 [Monthly Aggregation & Smoothing](#83-monthly-aggregation--smoothing)
-    - 8.4 [Interpretation of Low R²](#84-interpretation-of-low-r²)
-
-9. [Results Summary](#results-summary)
-10. [Key Insights](#key-insights)
-11. [Limitations](#limitations)
-12. [Future Work](#future-work)
-13. [References](#references)
+2. [Key Findings](#-key-findings)
+3. [Data Sources / Datasets](#-data-sources)
+4. [Phase 1 - Exploratory Data Analysis (EDA)](#-phase-1---data-exploration--analysis)
+    - 4.1 [Summary Statistics](#-1-summary-statistics)
+    - 4.2 [Autocorrelation & Conditional Mean Reversion](#-2-autocorrelation--conditional-mean-reversion)
+        - 4.2.1 [Mean Reversion (Larger Movements)](#mean-reversion-larger-movements)
+    - 4.3 [Liquidity Indicators (Range & Volume)](#-3-liquidity-indicators-range--volume)
+        - 4.3.1 [Range vs SORA change](#range-vs-sora-change)
+    - 4.4 [Calendar Effects](#-4-calendar-effects)
+        - 4.4.1 [Weekday Analysis](#weekday-analysis)
+        - 4.4.2 [Spike Analysis (Extreme Movements)](#-spike-analysis-extreme-movements)
+        - 4.4.3 [Volatility by Weekday](#volatility-by-weekday)
+    - 4.5 [Spike Behavior](#-5-spike-behavior)
+        - 4.5.1 [Spike Magnitude Distribution](#spike-magnitude-distribution)
+    - 4.6 [SORA Movement Directional Symmetry](#%EF%B8%8F-6-sora-movement-directional-symmetry)
+    - 4.7 [Stationarity](#-7-stationarity)
+    - 4.8 [Volatility vs SORA rate](#-8-volatility-vs-sora-rate)
+    - 4.9 [FX Correlation](#9-fx-correlation) 
+    - 4.10 [Finding the SORA Coefficient](#10-finding-the-sora-coefficient) 
+        - 4.10.1 [Time-Varying Sensitivity of SORA to Fed Policy](#time-varying-sensitivity-of-sora-to-fed-policy)
+5. [Phase 2 - Feature Engineering](#-phase-2---feature-engineering)
+    - 5.1 [Lag & Momentum Features](#-1-lag--momentum-features)
+    - 5.2 [Volatility & Regime Features](#-2-volatility--regime-features)
+    - 5.3 [Mean Reversion Signals](#-3-mean-reversion-signals)
+    - 5.4 [Calendar Effects](#-4-calendar-effects-1)
+    - 5.5 [FX & Macro Signals](#-5-fx--macro-signals)
+    - 5.6 [Policy & Regime Features](#-6-policy--regime-features)
+    - 5.7 [Interaction Features](#-7-interaction-features)
+    - 5.8 [Feature Engineering Key Takeaways](#-feature-engineering-key-takeaways)
+6. [Phase 3 - Predictive Modeling](#-phase-3---predictive-modeling)
+7. [Phase 4 - Model Optimization](#-phase-4---model-optimization)
+    - 7.1 [Hyperparameter Tuning](#-1-hyperparameter-tuning)
+    - 7.2 [Trying Other Model Types](#-2-trying-other-model-types)
+8. [Phase 5 - The Confidence Discovery](#-phase-5---the-confidence-discovery)
+    - 8.1 [Overall vs. Confident-Subset Accuracy](#-1-overall-vs-confident-subset-accuracy)
+    - 8.2 [Does This Translate Into Something Useful?](#-2-does-this-actually-translate-into-something-useful)
+    - 8.3 [What Makes a Day "Confident"?](#%EF%B8%8F-3-what-makes-a-day-confident)
+    - 8.4 [The MAS Meeting Cycle](#%EF%B8%8F-4-the-mas-meeting-cycle)
+9. [Phase 6 - Expanding the Feature Frontier](#-phase-6---expanding-the-feature-frontier)
+    - 9.1 [The Broad Sweep](#-1-the-broad-sweep---mostly-null-and-thats-informative)
+    - 9.2 [Three Rejected Features, Three Different Reasons](#-2-three-rejected-features-three-different-reasons)
+10. [Phase 7 - MAS Statement Tone Analysis](#%EF%B8%8F-phase-7---does-mass-language-itself-carry-information)
+    - 10.1 [Lexicon Score & Validation](#-1-building-and-validating-a-lexicon-score)
+    - 10.2 [LLM-Scored Comparison](#-2-an-llm-scored-comparison)
+    - 10.3 [Cross-Model Confirmation](#-3-neither-score-moves-the-needle---confirmed-four-different-ways)
+11. [Phase 8 - Refining the Shadow-NEER](#-phase-8---refining-the-shadow-neer)
+    - 11.1 [Time-Varying Weights](#%EF%B8%8F-1-time-varying-weights)
+    - 11.2 [Domestic-Exports-Only Weighting (NODX)](#-2-domestic-exports-only-weighting-nodx)
+    - 11.3 [Combining Both Fixes](#-3-combining-both-fixes)
+12. [Limitations](#-limitations)
+13. [Closing Thoughts](#-closing-thoughts)
+14. [Disclaimer](#-disclaimer)
+15. [Tech Stack](#%EF%B8%8F-tech-stack)
 ---
-
 ## 🧠 Overview
 This project analyzes SORA using historical data, with an emphasis on:
 
@@ -85,13 +79,37 @@ This project analyzes SORA using historical data, with an emphasis on:
 
 ---
 
+## 🧠 Key Findings
+
+**On SORA's underlying behavior**
+* SORA is **stable most of the time**, with occasional large shocks (fat tails, ~5.7% of days classified as spikes)
+* A **weekly liquidity cycle** exists around weekends; upward spikes cluster on Fridays, downward corrections on Mondays
+* SORA exhibits **mean reversion and volatility clustering**, and reversion strengthens after larger moves
+* SORA's relationship with the Fed is real but unstable - a rolling beta swings from -2.8 to +1.15 over time, and a static linear model only explains ~9% of variance
+
+**On predicting SORA's direction**
+* Hyperparameter tuning and testing six other model types found a real ceiling around ~0.66 AUC - **LightGBM, properly tuned, ultimately won outright** (best AUC, Brier score, and F1 simultaneously), once every model got a fair search and the improved shadow-NEER feature (see Phase 8)
+* **The model is far more useful selectively than uniformly**: ~59% accuracy across every day, ~75% on the ~30% of days it's actually confident about - this is the most useful result in the project in regards to prediction
+* Confidence is explainable, not a black box - it clusters around Fridays and high-rate regimes, the same two features that dominate the model overall
+* Ten additional data sources (oil, yields, VIX, GARCH, technical indicators, MAS statement tone via both a lexicon and an LLM) were tested rigorously; nearly all converged to a null result, suggesting a genuine ceiling for numeric/technical features on this task
+* Three different "rejected" features failed for three different, informative reasons: redundancy (GARCH duplicating `vol_5`), genuine non-use confirmed across four model architectures (MAS statement tone), and real-but-wrong-target signal (MACD/RSI predict magnitude, not direction)
+
+---
 ## 📦 Data Sources
 
 * SORA historical data (MAS): https://eservices.mas.gov.sg/statistics/dir/DomesticInterestRates.aspx
 * FX rates (MAS): https://eservices.mas.gov.sg/statistics/msb/exchangerates.aspx
 *  S\$ Nominal Effective Exchange Rate Index - \$NEER (MAS): https://www.mas.gov.sg/statistics/exchange-rates/s$neer
 *  List of Monetary Policy Decisions (MAS): https://www.mas.gov.sg/monetary-policy/past-monetary-policy-decisions
+* SGS Prices and Yields (MAS): https://eservices.mas.gov.sg/statistics/fdanet/BenchmarkPricesAndYields.aspx
+* Singapore Public Holidays consolidated (Ministry of Manpower): https://data.gov.sg/datasets/d_8ef23381f9417e4d4254ee8b4dcdb176/view
+* Singapore Merchandise Trade by Region/ Market (Singapore Department of Statistics): https://data.gov.sg/datasets/d_8a9fb1409830202a0b06c222ffabc36a/view
 * US Federal Reserve rates: https://www.macrotrends.net/datasets/2015/fed-funds-rate-historical-chart
+* Market Yield on U.S. Treasury Securities (FRED): https://fred.stlouisfed.org/series/dgs10
+* Brent/WTI prices (U.S. Energy Information Administration): https://www.eia.gov/dnav/pet/pet_pri_spt_s1_d.htm
+* HIBOR historical data (Census and Statistics Department Hong Kong): https://www.censtatd.gov.hk/en/web_table.html?id=340-45022#
+* Non-Oil Domestic Exports (NODX) By Selected Market (Singapore Department of Statistics): https://data.gov.sg/datasets/d_834e3f2d1179548cb378bec4bd61c988/view
+
 
 ---
 
@@ -113,7 +131,7 @@ I analyze the distribution of daily changes in SORA with a simple .describe()
 
 ```
 Mean: ~0  
-Std: 0.151  
+Std: 0.149 
 Min/Max: -1.26 / +1.48  
 Skew: +0.165
 ```
@@ -637,11 +655,11 @@ Feature interactions help model regime-dependent behavior (e.g. lag effects diff
     - Volatility → crisis periods
     - Mean reversion → stable environments
     - FX & policy → macro-driven shifts
-- Combining these signals enabled the model to reach ~0.711 AUC, indicating strong predictive structure in SORA dynamics
+- Combining these signals enabled the model to reach 0.6-0.7 AUC, indicating strong predictive structure in SORA dynamics
 
 ---
 
-## 🤖 Phase 3 — Predictive Modeling
+# 🤖 Phase 3 - Predictive Modeling
 
 ### Objective
 Predict direction of SORA changes.
@@ -650,28 +668,486 @@ Predict direction of SORA changes.
 - Linear Regression
 - Logistic Regression
 - XGBoost
+- CatBoost
+- LightGBM
+- Support Vector Classifier 
 
 ### Evaluation Metrics
-- Accuracy
 - ROC-AUC
-- RMSE
+- F1 Score (for tuned models)
+- Brier Score (for tuned models)
 
 ### Results
-| Model | AUC | Brier score |
-|------|--------|-----|
-| XGBoost | 0.711 | 0.22 |
+Truncated to 3 significant figures 
+
+| Model | AUC | 
+|------|--------|
+| LightGBM (base) | 0.657 | 
+| CatBoost (base) | 0.645 | 
+| XGBoost (base)  | 0.642 | 
+| Random Forest (base) | 0.638 |
+| SVC (base) | 0.616 | 
+| Logistic Regression (base) | 0.627 |
+| LSTM (base) | 0.627 | 
 
 ### Key Insight
 - Calendar effects (especially Friday) dominate predictions
 - Mean reversion provides secondary signal
-# 🧠 Key Findings
 
-* SORA is **stable most of the time**, with occasional large shocks
-* Liquidity conditions (range) strongly influence rate movements
-* A **weekly liquidity cycle** exists around weekends
-* SORA exhibits **mean reversion and volatility clustering**
-* Extreme events are more frequent than expected (fat tails)
+# 🚀 Phase 4 - Model Optimization
 
+## 🎯 Objective
+
+The Phase 3 XGBoost scored well on the original feature set. Before trying to extend the feature set further, I wanted to make sure I was squeezing everything I could out of what I already had.
+
+---
+
+## 🔧 1. Hyperparameter Tuning
+
+**Method**
+
+Walk-forward-safe `RandomizedSearchCV` over `max_depth`, `learning_rate`, `n_estimators`, `subsample`, `colsample_bytree`, `min_child_weight`, `reg_alpha`, `reg_lambda` - searched only within a training window, then evaluated on a held-out final fold neither the search nor the model ever saw during tuning.
+
+**Result**
+
+```
+Default hyperparameters: AUC ≈ 0.62
+Tuned hyperparameters:   AUC ≈ 0.66
+```
+
+**Interpretation**
+
+A real, meaningful gain - but this is close to a ceiling. Further tuning attempts (wider search, more iterations) stopped moving the number.
+
+**Takeaway**
+
+> Tuning bought a genuine ~2 points of AUC. It's not free though; once a model's hyperparameters are in a reasonable neighborhood, further gains have to come from better features, not more search.
+
+---
+
+## 🥊 2. Trying Other Model Types
+
+**Method**
+
+Tested SVC, LSTM, LightGBM, CatBoost, Random Forest, and a soft-voting ensemble against XGBoost - every model given an equally fair, walk-forward-safe hyperparameter search (`RandomizedSearchCV`, or a manual sweep for LSTM given its sequence structure), evaluated on the final, improved feature set including the refined shadow-NEER (see Phase 8).
+
+**Result**
+
+<u>Tuned Models</u>
+
+| Model | AUC | F1 Score | Brier score|
+|------|--------|-----|-----|
+| LightGBM (tuned) | 0.657 | 0.603 | 0.233 |
+| CatBoost (tuned) | 0.645 | 0.571 | 0.239 |
+| XGBoost (tuned)  | 0.642 | 0.576 | 0.235 |
+| Random Forest (tuned) | 0.638 | 0.577 | 0.237 |
+| SVC (tuned) | 0.630 | 0.513 | 0.257 |
+| Logistic Regression (tuned) | 0.627 | 0.535 | 0.265 |
+| LSTM (tuned) |  0.6302 | 0.2653 | 0.6043
+
+
+<u>Comparison with Base</u>
+
+| Model | AUC (Tuned) | AUC (Base) | Pct Change |
+|------|--------|-----|-----|
+| LightGBM  | 0.657 |0.603 | +8.9% |
+| CatBoost  | 0.645 | 0.630 | +2.51% |
+| XGBoost   | 0.642 | 0.581 | +10.38% |
+| Random Forest  | 0.616 | 0.577 | +0.77% |
+| SVC  | 0.630 | 0.622 | +2.21% |
+| Logistic Regression | 0.627 | 0.622 | +0.82% |
+| LSTM  |  0.6302 | 0.6275 | +0.43%
+
+
+
+
+**Interpretation**
+
+LightGBM wins outright - not just on AUC, but on Brier score and F1 simultaneously, the strongest possible version of a win across three different measures of model quality. Tree-based models generally have a real structural edge here, likely because the strongest signals (calendar effects, regime flags) are naturally the kind of thing trees exploit well; LightGBM's leaf-wise growth strategy apparently exploits that structure slightly better than XGBoost's level-wise approach on this particular dataset. LSTM needing more data than this dataset provides is unsurprising, not a failure of the approach. The ensemble losing to its own best component is a good reminder that combining models isn't automatically better - it helps most when the base models make genuinely different kinds of mistakes, which wasn't really the case here.
+
+**Takeaway**
+
+> LightGBM, properly tuned, is the best-performing model on this task. A clean sweep across AUC, calibration, and F1. Model selection had already reached its ceiling once every model was given a fair shot; the real gains from here had to come from feature quality (see Phase 8), not algorithm choice.
+
+---
+
+# 🎯 Phase 5 - The Confidence Discovery
+
+## 🧠 The Idea
+
+An AUC of 0.66 across *every single day* undersells what's actually happening. Some days the model has real signal; others it's essentially guessing. What if the model itself could tell the difference?
+
+---
+
+## 📈 1. Overall vs. Confident-Subset Accuracy
+
+**Method**
+
+For every prediction, take `|P(up) - 0.5|` as a confidence score. Sweep a threshold - only act when confidence clears the bar, otherwise abstain - and track accuracy and coverage (% of days a call gets made) at each threshold.
+
+**Result**
+
+![Plots](./plots/headline_hit_rate.png)
+
+```
+threshold  coverage  accuracy
+0.00       100.0%    59.6%
+0.05        58.5%    64.8%
+0.11        31.7%    72.1%
+0.16        18.5%    75.3%
+```
+
+The chart above shows the "big number" summary; the full accuracy/coverage tradeoff curve behind it looks like this:
+
+![Plots](./plots/confidence_tradeoff.png)
+
+**Interpretation**
+
+Accuracy climbs steadily as the bar for "act on this" rises. At a threshold giving ~30% coverage, the model is right better than 7 times out of 10 - on a meaningful third of days, not a cherry-picked handful. (Numbers reflect LightGBM, the model that ultimately won the fair comparison in Phase 4 - recalibrated after both a mid-project data refresh and the switch away from XGBoost, since a fixed confidence threshold doesn't automatically transfer between models or across a changing dataset.)
+
+**Takeaway**
+
+> The model isn't uniformly ~60% accurate. It's occasionally very sure and usually right, and often unsure and closer to a coin flip. Knowing which is which turns out to matter more than any single AUC number.
+
+---
+
+## 💰 2. Does This Actually Translate Into Something Useful?
+
+**Method**
+
+Backtest two strategies walk-forward: trade every day, vs. trade only on the days that clear the confidence threshold (sit out otherwise).
+
+**Result**
+
+![Plots](./plots/confident_vs_full_backtest.png)
+
+```
+Trade every day:    total captured = 28.93   |  Sharpe-like ratio (active days) = 0.176
+Confident-only:     total captured = 24.00   |  Sharpe-like ratio (active days) = 0.455
+Confident-only trades on ~31.6% of days vs. 100% for full coverage
+```
+
+**Interpretation**
+
+Full coverage ends with a higher *raw total* - it's trading every single day, so that's expected, not a contradiction. The real story is efficiency: the confident-only strategy captures ~83% of the total return while being active less than a third as often, more than doubling the Sharpe-like ratio per trade taken.
+
+**Takeaway**
+
+> This isn't "the selective strategy wins outright" - it's "similar payoff, a fraction of the exposure." That's a more honest and, I'd argue, more useful finding than a bigger total return would have been.
+
+---
+
+## 🗓️ 3. What Makes a Day "Confident"?
+
+**Method**
+
+Cross-reference confident vs. non-confident days against `days_since_mas`, `is_friday`, and `sora_regime` - the same three features that dominate SHAP importance.
+
+**Result**
+
+![Plots](./plots/shap_importance.png)
+
+```
+Friday share:        33.3% (confident days) vs. 5.4% (non-confident)  - a 6.2x difference
+sora_regime share:    60.6% (confident days) vs. 26.9% (non-confident) - a 2.3x difference
+days_since_mas:       66.3 avg (confident) vs. 62.1 avg (non-confident) - a smaller effect
+```
+
+**Interpretation**
+
+Confidence isn't random - it clusters heavily around Fridays and high-rate-regime days, and the effect is if anything sharper for LightGBM than it was for XGBoost. `is_friday` and `sora_regime` alone account for more SHAP importance than everything else in the model combined; the refined shadow-NEER feature (Phase 8) now ranks 4th, meaningfully ahead of where it sat under the original construction.
+
+**Takeaway**
+
+> The model mostly knows what it knows on Fridays, and mostly when SORA is already in a high-rate regime. That's a mechanistic, explainable reason for the confidence pattern - not a black box coincidence.
+
+---
+
+## 〰️ 4. The MAS Meeting Cycle
+
+**Method**
+
+Bucket hit rate by `days_since_mas` in 15-day windows.
+
+**Result**
+
+![Plots](./plots/hitrate_vs_mas_cycle.png)
+
+```
+0-15 days:   ~56-63%  (moved after a mid-project data refresh - see below)
+46-60 days:  lowest bucket in every version tested
+90+ days:    among the highest in every version tested
+```
+
+**Interpretation**
+
+A visually clean U-shape appeared here initially, but it's a good example of something that didn't survive proper scrutiny. Two follow-up checks, run specifically because the shape looked *too* clean: (1) a mid-project data refresh (a few more months of real data) reshuffled the walk-forward fold boundaries enough that the original post-meeting spike disappeared, leaving only a shallower mid-cycle dip; (2) a Wilson confidence-interval check found **every bucket's interval overlaps every other bucket's** - none of the differences are statistically distinguishable from noise, even at finer bucket resolution extending out to genuine semi-annual gaps (150-180+ days). A related hypothesis - that FX markets "price in" MAS's decision in the weeks before a meeting - also failed a proper split-sample validation (a promising correlation on one half of the data didn't replicate on the other half).
+![Plots](./plots/hitrate_extended_bins.png)
+
+**Takeaway**
+
+> A pattern that looks clean on one snapshot of data isn't the same as a confirmed finding. This one didn't survive a data refresh, a confidence-interval check, or a held-out validation test - worth reporting as "a suggestive pattern worth revisiting as more MAS meetings accumulate data", not a settled result. Catching this is arguably a better outcome than a clean-looking chart that never got checked.
+
+---
+
+# 🔍 Phase 6 - Expanding the Feature Frontier
+
+## 🎯 Objective
+
+With model selection and hyperparameters near their ceiling, the obvious next lever was new information. Pulled in oil prices (WTI, Brent), the US 10Y yield, Singapore's own SGS yield curve, Hong Kong HIBOR, VIX, RSI, MACD, GARCH-modeled volatility, and SORA's own transaction volume (present in the raw data since day one, never actually tested until now).
+
+---
+
+## 📉 1. The Broad Sweep - Mostly Null, and That's Informative
+
+**Method**
+
+Each source added to the full feature set, tested via the same walk-forward AUC comparison used throughout.
+
+**Result**
+
+```
+Oil, US 10Y yield, SGS/HIBOR:  +0.006 AUC (small, real, plausibly worthwhile)
+VIX:                            -0.001 AUC (a wash)
+GARCH:                          -0.006 AUC alongside vol_5
+RSI + MACD (added alongside):   -0.011 AUC
+CNY/Budget Day event flags:     -0.003 AUC (partial-coverage window)
+```
+
+**Interpretation**
+
+Across nearly ten independently-sourced signals, almost everything landed within noise of the existing baseline. Given how many different data types were tried - commodities, sovereign yields, volatility indices, technical indicators - this convergence is itself a finding: it suggests a real ceiling for numeric, macro/technical features on this specific prediction task, not a string of unlucky attempts.
+
+**Takeaway**
+
+> Ten different data sources, one consistent answer. That's stronger evidence of a genuine ceiling than any single null result could be on its own.
+
+---
+
+## 🔬 2. Three Rejected Features, Three Different Reasons
+
+**Method**
+
+"Add it and see if AUC moves" turned out to hide real information in a couple of cases - a feature can lose a split-selection competition against a stronger, correlated feature without being worthless. Followed up with a direct swap test (replace, don't just add) and literal split-usage counts for the more promising candidates.
+
+**Result**
+
+![Plots](./plots/rejected_features_summary.png)
+
+```
+GARCH:        0.83 correlation with vol_5 - a fancier calculation of a signal already present
+MAS tone:     0 splits used across XGBoost, LightGBM, CatBoost, and 0.545-0.997 p-values in SARIMAX
+MACD/RSI:     23-30 real splits used, statistically significant coefficients in SARIMAX,
+              but net-negative (-0.021 AUC) when swapped in for sora_regime directly
+```
+
+**Interpretation**
+
+Three different stories hiding behind one word ("rejected"):
+- **GARCH** is a *redundancy* - more principled math, same underlying information `vol_5` already provides.
+- **MAS tone** (see Phase 9) is *truly unused* - confirmed across four completely different model architectures, not an artifact of any one algorithm's quirks.
+- **MACD/RSI** are *real but wrong for this task* - used by trees, statistically significant in a linear model of `SORA_change` magnitude, but that information doesn't help *directional* classification once regime/reversion features are already doing similar work.
+
+**Takeaway**
+
+> Not every rejected feature fails for the same reason. Distinguishing "redundant," "unused," and "real signal for the wrong target" turned this from three shrugs into three actual findings.
+
+---
+
+# 🗣️ Phase 7 - Does MAS's Language Itself Carry Information?
+
+## 🎯 Objective
+
+Every feature so far has been numeric - prices, rates, calendar flags. MAS's actual policy statements are the sole different *kind* of information available: qualitative language rather than a time series.
+
+---
+
+## 📖 1. Building and Validating a Lexicon Score
+
+**Method**
+
+Scraped all 61 Monetary Policy Statements (2001–2026) and scored each on a hawkish/dovish keyword lexicon, with basic negation handling (so "we do *not* expect further increases" doesn't get miscounted as hawkish).
+
+**Result**
+
+```
+Most dovish:  April 2025 (-37.2)  →  actual decision: "Reduce slightly"
+Most hawkish: July 2026 (+4.9)    →  actual decision: "Increase very slightly"
+```
+
+**Interpretation**
+
+The lexicon tracks real, known policy direction correctly at the extremes - a good sanity check before trusting it on the harder, more ambiguous statements.
+
+**Takeaway**
+
+> A simple keyword count, done carefully, gets the obvious cases right. That's the bar it needs to clear before being trusted on anything subtler.
+
+---
+
+## 🤖 2. An LLM-Scored Comparison
+
+**Method**
+
+Scored the same 61 statements independently with an LLM, using a fixed rubric (-5 to +5), judged standalone with no hindsight about how markets actually reacted.
+
+**Result**
+
+```
+Correlation with lexicon score: 0.67
+```
+
+**Interpretation**
+
+Strong enough to confirm both are measuring the same real thing - statement tone - but different enough (33% of the variance) that they're truly distinct signals, not just two versions of the same measurement.
+
+**Takeaway**
+
+> Two independent scoring methods, meaningfully correlated but not identical. Worth testing both rather than assuming either one is "the" answer.
+
+---
+
+## 🧪 3. Neither Score Moves the Needle - Confirmed Four Different Ways
+
+**Method**
+
+Tested same-day encoding, persistence/decay variants (does a statement's tone linger for weeks after?), redundancy against the existing `slope_direction` encoding, and - critically - actual split-usage counts across XGBoost, LightGBM, and CatBoost, plus SARIMAX coefficient significance.
+
+**Result**
+
+```
+XGBoost:   0 splits used, either score
+LightGBM:  0 splits used
+CatBoost:  near-zero importance (0.005-0.048), AUC unchanged
+SARIMAX:   llm_score p=0.545, lexicon_score p=0.997 - nowhere close to significant
+           (lag1, vol_5, is_friday all p<0.01 in the same regression, confirming the test itself works)
+```
+
+**Interpretation**
+
+Four completely different modeling paradigms - tree-based, boosted, and classical linear - agree. This isn't one algorithm's blind spot; the tone signal, however it's measured, simply isn't adding information the model doesn't already have some other way of capturing.
+
+**Takeaway**
+
+> Unfortunately, converging evidence across four model types is about as solid a null result as this kind of analysis can produce. Statement tone doesn't help predict next-day direction - not because of a modeling artifact, but because the information appears to already be captured through the categorical policy encoding and market-reaction features already in the model.
+
+---
+
+# 🧮 Phase 8 - Refining the Shadow-NEER
+
+## 🎯 Objective
+
+The trade-share-weighted shadow-NEER (Phase 6) was always a deliberate simplification: one static weight vector, averaged over 2021-2023, applied uniformly across the entire 2013-2026 sample, built from total merchandise trade (which includes goods just passing through Singapore's ports, not really originating here). Two specific, nameable flaws - not vague dissatisfaction - worth fixing on their own economic merits rather than searching for an unrelated replacement.
+
+---
+
+## 🕰️ 1. Time-Varying Weights
+
+**Method**
+
+Rather than one fixed vector for 13 years, computed a fresh weight vector for *each* year using that
+year's own trade data (available back to 2013), applying each year's weights only to that year's FX data.
+For 2024+ (beyond the trade data's coverage), carried forward 2023's weights as the most recent available estimate.
+
+**Result**
+
+```
+Mean AUC - time-varying weights: 0.6416
+Mean AUC - original static trade-share: 0.6363
+```
+
+**Interpretation**
+
+A real, if modest, gain from fixing a genuine flaw: a snapshot from one 3-year window doesn't reflect how Singapore's trade mix actually shifted across more than a decade.
+
+**Takeaway**
+
+> Averaging 13 years of trade relationships into a single number was always a simplification. Letting the weights actually move with the data they're supposed to represent helped, exactly as it should.
+
+---
+
+## 📦 2. Domestic-Exports-Only Weighting (NODX)
+
+**Method**
+
+Total merchandise trade includes re-exports - goods that pass through Singapore without originating or terminating there, a well-known distortion given Singapore's entrepôt trade. Singapore's official Non-Oil Domestic Exports (NODX) data tracks *domestic-origin* exports specifically, by market,
+back to 1978. Built a hybrid weight vector: NODX-derived shares for the ~10 markets it covers, existing trade shares for the rest.
+
+**Result**
+
+```
+Mean AUC - NODX-hybrid weighting: 0.6428
+Mean AUC - original static trade-share: 0.6363
+```
+
+**Interpretation**
+
+A comparable gain to the time-varying fix, from a completely different angle - cleaner, less
+re-export-contaminated trade figures for the currencies it could cover.
+
+**Takeaway**
+
+> Two different, well-motivated critiques of the same feature, two independent improvements. Neither
+> fix was found by searching for a better number - both came from asking "what's actually wrong with how
+> this was built."
+
+---
+
+## 🧩 3. Combining Both Fixes
+
+**Method**
+
+Since the two fixes address completely different flaws (staleness vs. re-export contamination), there's no reason they should be mutually exclusive. Built a fully combined version: per-year weights, using that year's own NODX-derived shares for the covered currencies.
+
+**Result**
+
+```
+Mean AUC - combined (time-varying + NODX): 0.6448
+Mean AUC - NODX-hybrid only:                0.6428
+Mean AUC - time-varying only:                0.6416
+Mean AUC - original static trade-share:      0.6363
+```
+
+**Interpretation**
+
+The combined version won outright - better than either fix alone, not just noise scattering around a similar value. That's meaningfully stronger evidence than any single result on its own: it suggests both fixes were capturing real, distinct pieces of information rather than being two attempts at the same correction.
+
+**Takeaway**
+
+> A ~0.008 AUC gain is modest in absolute terms, but the way it was earned is the actual finding: not by searching or tuning, but by correctly diagnosing two specific flaws and fixing each on its own economic merits - and having them stack cleanly is a good sign neither fix was a fluke.
+
+---
+
+
+# ⚠️ Limitations
+
+* **Small samples at the extremes.** Meeting-day and near-meeting-day comparisons often ran on 12-34
+  observations after walk-forward splitting - real, but not enough to treat any single percentage point as gospel. Several diagnostics in this project exist specifically because an early result *looked* compelling on too few data points and needed a harder second look (see: the near-meeting probability check, which started at a misleadingly precise "91% of predictions changed" before the metric itself
+  was found to be wrong).
+* **The binary target hides a "flat" category.** `direction = SORA_change > 0` forces every zero-change day into the same class as a down day. A dedicated 3-class reframing (up / flat / down) was scoped but not built - a reasonable next step rather than something this analysis resolved.
+* **`Year` is a double-edged feature.** Dropping it cost a small amount of AUC, meaning it was capturing a real, slow-moving trend - but a raw calendar year can't extrapolate into years the model has never seen. The trade-off (keep it for max in-range accuracy vs. drop it for safer generalization) is stated explicitly rather than resolved one way in this repo.
+* **SGS and HIBOR are annual-frequency data**, forward-filled to daily. They function as a coarse "which macro regime are we in" signal, not a genuine daily indicator - a deliberate trade-off, not an oversight, but worth knowing before reading too much into their day-to-day contribution.
+* **The currency basket estimate (now a separate project) never fully resolved its own generalization problem.** The shadow-NEER feature in this repo was deliberately rebuilt on fixed, publicly observed trade shares specifically to avoid inheriting that unresolved uncertainty - worth knowing  the backstory if that number is ever revisited.
+
+
+---
+
+# 💭 Closing Thoughts
+
+The single biggest lesson from this project wasn't a feature or a model - it was how often a *promising* result turned out to be an artifact once tested properly (cue the data morganas). A near-perfect out-of-sample R² was leakage. A 46x backtest outperformance was leakage. A 91% "prediction change" rate was a broken metric, not a finding. Two features that looked identical in their downstream effect turned out to be identical for the mechanistic reason that neither was ever actually used by the model. 
+
+None of these were dead ends; each one forced a more careful test, and the project is more trustworthy for having gone through them rather than stopping at the first encouraging number.
+
+The result I'd point to first, if asked what this project actually found: **the model doesn't need to be right every day to be useful - it needs to know when it's right.** 
+
+~59% accuracy across every single day may seem modest; yes - better than a coinflip no doubt, but an easy-to-dismiss number. ~71% accuracy on the ~30% of days it's actually confident about is a different story, and it's explainable rather than a black box: it clusters around Fridays and high-rate regimes - the two features that dominate every model tried - with mean-reversion (distance_from_mean) and the refined shadow-NEER feature also pulling real weight under the winning LightGBM model.
+
+This endeavour reminded me of a quote;
+```
+“See the art in what's subtracted.”
+```
+
+---
 
 # ⚠️ Disclaimer
 
@@ -682,9 +1158,12 @@ It does not constitute financial advice.
 
 # 🛠️ Tech Stack
 
-* Python (Pandas, NumPy, SciPy)
-* Statsmodels
-* Scikit-learn
+* Python (Pandas, NumPy, SciPy, Statsmodels, Scikit-learn)
+* XGBoost, LightGBM, CatBoost, SVC, LSTM (TensorFlow/Keras)
+* SHAP (model interpretability)
+* SARIMAX (statsmodels) - exogenous regressor significance testing
+* BeautifulSoup, Selenium/Playwright - MAS statement scraping (JS-rendered pages)
+* Matplotlib - custom chart styling
 * Jupyter Notebook
 
 ---
